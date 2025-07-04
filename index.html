@@ -1,971 +1,185 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StayHub - Airbnb Clone</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #fff;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header & Navigation */
-        header {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff5a5f;
-            text-decoration: none;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: #f7f7f7;
-            border-radius: 40px;
-            padding: 12px 24px;
-            min-width: 400px;
-            border: 1px solid #ddd;
-            transition: all 0.3s ease;
-        }
-
-        .search-bar:hover {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        .search-bar input {
-            border: none;
-            background: none;
-            outline: none;
-            flex: 1;
-            margin: 0 10px;
-            font-size: 14px;
-        }
-
-        .search-btn {
-            background: #ff5a5f;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .host-btn {
-            background: none;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 10px 15px;
-            border-radius: 20px;
-            transition: background 0.3s;
-        }
-
-        .host-btn:hover {
-            background: #f7f7f7;
-        }
-
-        .profile-menu {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: box-shadow 0.3s;
-        }
-
-        .profile-menu:hover {
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        /* Main Content */
-        main {
-            margin-top: 80px;
-            padding: 40px 0;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 80px 0;
-            text-align: center;
-            color: white;
-            margin-bottom: 60px;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .hero p {
-            font-size: 20px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        /* Filters */
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 40px;
-            overflow-x: auto;
-            padding: 10px 0;
-        }
-
-        .filter-btn {
-            background: #f7f7f7;
-            border: 1px solid #ddd;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            min-width: 100px;
-            text-align: center;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: #ff5a5f;
-            color: white;
-            border-color: #ff5a5f;
-        }
-
-        /* Listings Grid */
-        .listings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .listing-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .listing-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-        }
-
-        .listing-image {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .listing-image::before {
-            content: '🏠';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 60px;
-            opacity: 0.3;
-        }
-
-        .heart-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255,255,255,0.9);
-            border: none;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .heart-btn:hover {
-            background: white;
-            transform: scale(1.1);
-        }
-
-        .heart-btn.liked {
-            color: #ff5a5f;
-        }
-
-        .listing-info {
-            padding: 20px;
-        }
-
-        .listing-location {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .listing-type {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .listing-rating {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-bottom: 10px;
-        }
-
-        .stars {
-            color: #ffc107;
-        }
-
-        .rating-text {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .listing-price {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .price-amount {
-            color: #333;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            padding: 40px;
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            max-width: 800px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-header {
-            padding: 30px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .modal-subtitle {
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .modal-body {
-            padding: 30px;
-        }
-
-        .modal-image {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-            border-radius: 15px;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .modal-image::before {
-            content: '🏠';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 80px;
-            opacity: 0.3;
-        }
-
-        .amenities {
-            margin: 30px 0;
-        }
-
-        .amenities h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        .amenities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .amenity-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .booking-section {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-            margin-top: 30px;
-        }
-
-        .booking-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .form-group input, .form-group select {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .book-btn {
-            background: #ff5a5f;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            width: 100%;
-        }
-
-        .book-btn:hover {
-            background: #e14349;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s;
-        }
-
-        .close-modal:hover {
-            background: #f0f0f0;
-        }
-
-        /* Host Modal */
-        .host-form {
-            display: grid;
-            gap: 20px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .form-group textarea {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        /* Footer */
-        footer {
-            background: #333;
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 15px;
-            color: #ff5a5f;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 8px;
-        }
-
-        .footer-section ul li a {
-            color: #ccc;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-section ul li a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #555;
-            padding-top: 20px;
-            color: #ccc;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .search-bar {
-                min-width: 200px;
-            }
-            
-            .hero h1 {
-                font-size: 32px;
-            }
-            
-            .listings-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .booking-form {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #ff5a5f;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Success/Error Messages */
-        .message {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-weight: 500;
-        }
-
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
-</head>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+    <title>Netflix - Watch TV Shows Online, Watch Movies Online</title>
+
+    </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav class="container">
-            <a href="#" class="logo">StayHub</a>
-            
-            <div class="search-bar">
-                <span>📍</span>
-                <input type="text" placeholder="Where are you going?" id="locationSearch">
-                <span>📅</span>
-                <input type="date" id="checkinDate">
-                <input type="date" id="checkoutDate">
-                <span>👥</span>
-                <select id="guestCount">
-                    <option value="1">1 guest</option>
-                    <option value="2">2 guests</option>
-                    <option value="3">3 guests</option>
-                    <option value="4">4 guests</option>
-                    <option value="5+">5+ guests</option>
-                </select>
-                <button class="search-btn" onclick="searchListings()">🔍</button>
-            </div>
-
-            <div class="user-menu">
-                <button class="host-btn" onclick="openHostModal()">Become a Host</button>
-                <div class="profile-menu" onclick="toggleProfileMenu()">
-                    <span>☰</span>
-                    <span>👤</span>
-                </div>
+    <header class="header" id="header">
+        <nav class="nav">
+            <a href="#" class="logo">NETFLIX</a>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#shows">TV Shows</a>
+                <a href="#movies">Movies</a>
+                <a href="#new">New & Popular</a>
+                <a href="#list">My List</a>
             </div>
         </nav>
     </header>
 
-    <!-- Main Content -->
     <main>
-        <!-- Hero Section -->
         <section class="hero">
-            <div class="container">
-                <h1>Find your perfect stay</h1>
-                <p>Discover unique accommodations around the world</p>
+            <div class="hero-content">
+                <h1>Unlimited movies, TV shows, and more</h1>
+                <p>Watch anywhere. Cancel anytime.</p>
+                <a href="#" class="cta-button">Get Started</a>
             </div>
         </section>
 
-        <div class="container">
-            <!-- Filters -->
-            <div class="filters">
-                <button class="filter-btn active" onclick="filterListings('all')">All</button>
-                <button class="filter-btn" onclick="filterListings('house')">Houses</button>
-                <button class="filter-btn" onclick="filterListings('apartment')">Apartments</button>
-                <button class="filter-btn" onclick="filterListings('villa')">Villas</button>
-                <button class="filter-btn" onclick="filterListings('cabin')">Cabins</button>
-                <button class="filter-btn" onclick="filterListings('condo')">Condos</button>
+        <section class="section">
+            <div class="content-row">
+                <div class="content-text">
+                    <h3>Enjoy on your TV</h3>
+                    <p>Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.</p>
+                </div>
+                <div class="content-image">
+                    <div class="placeholder-image tv-image">
+                          Smart TV Experience<br>
+                        <small>Ultra HD</small>
+                    </div>
+                </div>
             </div>
 
-            <!-- Listings Grid -->
-            <div class="listings-grid" id="listingsGrid">
-                <!-- Listings will be populated by JavaScript -->
+            <div class="content-row">
+                <div class="content-text">
+                    <h3>Download your shows to watch offline</h3>
+                    <p>Save your favorites easily and always have something to watch.</p>
+                </div>
+                <div class="content-image">
+                    <div class="placeholder-image mobile-image">
+                         Mobile Downloads<br>
+                        <small>Available on iOS & Android</small>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <div class="content-row">
+                <div class="content-text">
+                    <h3>Watch everywhere</h3>
+                    <p>Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.</p>
+                </div>
+                <div class="content-image">
+                    <div class="placeholder-image multi-device-image">
+                          Multi-Device Streaming<br>
+                        <small>Up to 4K Quality</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="carousel-section">
+            <div class="carousel-container">
+                <h2 class="carousel-title">Trending Now</h2>
+                <div class="carousel" id="trending-carousel">
+                    <div class="carousel-item"> Action Thriller #1</div>
+                    <div class="carousel-item"> Drama Series #2</div>
+                    <div class="carousel-item"> Comedy Special #3</div>
+                    <div class="carousel-item"> Sci-Fi Adventure #4</div>
+                    <div class="carousel-item"> Romance Movie #5</div>
+                    <div class="carousel-item"> Mystery Series #6</div>
+                    <div class="carousel-item"> Documentary #7</div>
+                    <div class="carousel-item"> Superhero Film #8</div>
+                </div>
+            </div>
+
+            <div class="carousel-container">
+                <h2 class="carousel-title">Netflix Originals</h2>
+                <div class="carousel" id="originals-carousel">
+                    <div class="carousel-item"> Royal Drama</div>
+                    <div class="carousel-item"> Science Fiction</div>
+                    <div class="carousel-item"> Dark Comedy</div>
+                    <div class="carousel-item"> Fantasy Epic</div>
+                    <div class="carousel-item"> Space Opera</div>
+                    <div class="carousel-item"> Time Travel</div>
+                    <div class="carousel-item"> Ocean Documentary</div>
+                    <div class="carousel-item"> Art House Film</div>
+                </div>
+            </div>
+
+            <div class="carousel-container">
+                <h2 class="carousel-title">Popular on Netflix</h2>
+                <div class="carousel" id="popular-carousel">
+                    <div class="carousel-item"> Top 10 #1</div>
+                    <div class="carousel-item"> Trending #2</div>
+                    <div class="carousel-item"> Highly Rated #3</div>
+                    <div class="carousel-item"> Award Winner #4</div>
+                    <div class="carousel-item"> Critics Choice #5</div>
+                    <div class="carousel-item"> Audience Favorite #6</div>
+                    <div class="carousel-item"> Hidden Gem #7</div>
+                    <div class="carousel-item"> Viral Hit #8</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <div class="faq-container">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What is Netflix?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies and documentaries on thousands of internet-connected devices.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How much does Netflix cost?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from $6.99 to $22.99 a month.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Where can I watch?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web or on any internet-connected device.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How do I cancel?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Netflix is flexible. There are no pesky contracts and no commitments. You can easily cancel your account online in two clicks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Listing Detail Modal -->
-    <div class="modal" id="listingModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal()">&times;</button>
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle"></h2>
-                <div class="modal-subtitle">
-                    <span id="modalLocation"></span>
-                    <span id="modalRating"></span>
-                </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">FAQ</a>
+                <a href="#">Help Center</a>
+                <a href="#">Account</a>
+                <a href="#">Media Center</a>
+                <a href="#">Investor Relations</a>
+                <a href="#">Jobs</a>
+                <a href="#">Ways to Watch</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy</a>
+                <a href="#">Cookie Preferences</a>
+                <a href="#">Corporate Information</a>
+                <a href="#">Contact Us</a>
             </div>
-            <div class="modal-body">
-                <div class="modal-image" id="modalImage"></div>
-                <p id="modalDescription"></p>
-                
-                <div class="amenities">
-                    <h3>Amenities</h3>
-                    <div class="amenities-grid" id="modalAmenities"></div>
-                </div>
-
-                <div class="booking-section">
-                    <h3>Book this stay</h3>
-                    <div class="booking-form">
-                        <div class="form-group">
-                            <label>Check-in</label>
-                            <input type="date" id="bookingCheckin">
-                        </div>
-                        <div class="form-group">
-                            <label>Check-out</label>
-                            <input type="date" id="bookingCheckout">
-                        </div>
-                        <div class="form-group">
-                            <label>Guests</label>
-                            <select id="bookingGuests">
-                                <option value="1">1 guest</option>
-                                <option value="2">2 guests</option>
-                                <option value="3">3 guests</option>
-                                <option value="4">4 guests</option>
-                                <option value="5+">5+ guests</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Total Price</label>
-                            <input type="text" id="totalPrice" readonly>
-                        </div>
-                    </div>
-                    <button class="book-btn" onclick="bookListing()">Reserve</button>
-                    <div id="bookingMessage"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Host Modal -->
-    <div class="modal" id="hostModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeHostModal()">&times;</button>
-            <div class="modal-header">
-                <h2 class="modal-title">List Your Property</h2>
-                <p>Share your space with travelers from around the world</p>
-            </div>
-            <div class="modal-body">
-                <form class="host-form" onsubmit="submitListing(event)">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Property Title</label>
-                            <input type="text" id="hostTitle" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Property Type</label>
-                            <select id="hostType" required>
-                                <option value="">Select type</option>
-                                <option value="house">House</option>
-                                <option value="apartment">Apartment</option>
-                                <option value="villa">Villa</option>
-                                <option value="cabin">Cabin</option>
-                                <option value="condo">Condo</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Location</label>
-                            <input type="text" id="hostLocation" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Price per night</label>
-                            <input type="number" id="hostPrice" min="1" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Bedrooms</label>
-                            <select id="hostBedrooms" required>
-                                <option value="1">1 bedroom</option>
-                                <option value="2">2 bedrooms</option>
-                                <option value="3">3 bedrooms</option>
-                                <option value="4">4+ bedrooms</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Max Guests</label>
-                            <select id="hostGuests" required>
-                                <option value="2">2 guests</option>
-                                <option value="4">4 guests</option>
-                                <option value="6">6 guests</option>
-                                <option value="8">8+ guests</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="hostDescription" placeholder="Describe your property..." required></textarea>
-                    </div>
-                    <button type="submit" class="book-btn">List Property</button>
-                    <div id="hostMessage"></div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Safety Information</a></li>
-                        <li><a href="#">Cancellation Options</a></li>
-                        <li><a href="#">Report Concern</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Community</h3>
-                    <ul>
-                        <li><a href="#">Accessibility</a></li>
-                        <li><a href="#">Guest Referrals</a></li>
-                        <li><a href="#">Gift Cards</a></li>
-                        <li><a href="#">StayHub.org</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Hosting</h3>
-                    <ul>
-                        <li><a href="#">Host Your Home</a></li>
-                        <li><a href="#">Host Resources</a></li>
-                        <li><a href="#">Community Forum</a></li>
-                        <li><a href="#">Responsible Hosting</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>About</h3>
-                    <ul>
-                        <li><a href="#">Company</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Press</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 StayHub, Inc. All rights reserved.</p>
-            </div>
+            <p>&copy; 2025 Netflix Clone. This is a demo landing page.</p>
         </div>
     </footer>
 
-    <script>
-        // Sample data - In a real app, this would come from a backend API
-        let listings = [
-            {
-                id: 1,
-                title: "Modern Downtown Apartment",
-                location: "New York, NY",
-                type: "apartment",
-                price: 150,
-                rating: 4.8,
-                reviews: 127,
-                bedrooms: 2,
-                guests: 4,
-                description: "Beautiful modern apartment in the heart of downtown. Perfect for business travelers and couples looking to explore the city.",
-                amenities: ["WiFi", "Kitchen", "Air Conditioning", "Parking", "Gym", "Pool"],
-                host: "Sarah Johnson"
-            },
-            {
-                id: 2,
-                title: "Cozy Mountain Cabin",
-                location: "Aspen, CO",
-                type: "cabin",
-                price: 200,
-                rating: 4.9,
-                reviews: 89,
-                bedrooms: 3,
-                guests: 6,
-                description: "Escape to this charming mountain cabin with stunning views. Perfect for families and groups seeking adventure.",
-                amenities: ["WiFi", "Fireplace", "Hot Tub", "Hiking Trails", "Kitchen", "Parking"],
-                host: "Mike Anderson"
-            },
-            {
-                id: 3,
-                title: "Beachfront Villa",
-                location: "Malibu, CA",
-                type: "villa",
-                price: 500,
-                rating: 4.7,
-                reviews: 203,
-                bedrooms: 4,
-                guests: 8,
-                description: "Luxury beachfront villa with private beach access. Wake up to ocean views every morning.",
-                amenities: ["Private Beach", "Pool", "WiFi", "Kitchen", "Parking", "Ocean View"],
-                host: "Jessica Chen"
-            },
-            {
-                id: 4,
-                title: "Historic Brownstone",
-                location: "Boston, MA",
-                type: "house",
-                price: 120,
-                rating: 4.6,
-                reviews: 156,
-                bedrooms: 3,
-                guests: 6,
-                description: "Stay in a beautifully restored historic brownstone in Boston's Back Bay neighborhood.",
-                amenities: ["WiFi", "Kitchen", "Parking", "Historic Character", "Garden", "Near Transit"],
-                host: "Robert Thompson"
-            },
-            {
-                id: 5,
-                title: "Modern Condo with City Views",
-                location: "Chicago, IL",
-                type: "condo",
-                price: 180,
-                rating: 4.8,
-                reviews: 94,
-                bedrooms: 2,
-                guests: 4,
-                description: "Sleek modern condo on the 25th floor with panoramic city views and luxury amenities.",
-                amenities: ["City Views", "WiFi", "Kitchen", "Gym", "Pool", "Concierge"],
-                host: "Emily Rodriguez"
-            },
-            {
-                id: 6,
-                title: "Rustic Farmhouse",
-                location: "Austin, TX",
-                type: "house",
-                price: 95,
-                rating: 4.5,
-                reviews: 78,
-                bedrooms: 2,
-                guests: 4,
-                description: "Charming rustic farmhouse just outside Austin. Perfect for a peaceful getaway with modern comforts.",
-                amenities: ["WiFi", "Kitchen", "Fireplace", "Garden", "Parking", "Pet Friendly"],
-                host: "David Wilson"
-            }
-        ];
-
-        let filteredListings = [...listings];
-        let currentListing = null;
-
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', function() {
-            renderListings();
-            setDefaultDates();
-        });
-
-        // Set default dates for booking
-        function setDefaultDates() {
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const nextWeek = new Date(today);
-            nextWeek.setDate(nextWeek.getDate() + 7);
-
-            document.getElementById('checkinDate').value = tomorrow.toISOString().split('T')[0];
-            document.getElementById('checkoutDate').value = nextWeek.toISOString().split('T')[0];
-        }
-
-        // Render listings to the grid
-        function renderListings() {
-            const grid = document.getElementById('listingsGrid');
-            grid.innerHTML = '';
-
-            filteredListings.forEach(listing => {
-                const card = document.createElement('div');
-                card.className = 'listing-card';
-                card.onclick = () => openListingModal(listing);
-
-                card.innerHTML = `
-                    <div class="listing-image">
-                        <button class="heart-btn" onclick="event.stopPropagation(); toggleFavorite(${listing.id})">
-                            ♡
-                        </button>
-                    </div>
-                    <div class="listing-info">
-                        <div class="listing-location">${listing.location}</div>
-                        <div class="listing-type">${listing.bedrooms} bedroom ${listing.type}</div>
-                        <div class="listing-rating">
-                            <span class="stars">★</span>
-                            <span class="rating-text">${listing.rating} (${listing.reviews} reviews)</span>
-                        </div>
-                        <div class="listing-price">
-                            <span class="price-amount">$${listing.price}</span> / night
-                        </div>
-                    </div>
-                `;
-
-                grid.appendChild(card);
-            });
-        }
-
-        // Filter listings by type
-        function filterListings(type) {
-            // Update active filter button
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            if (type === 'all') {
-                filteredListings = [...listings];
-            } else {
-                filteredListings = listings.filter(listing => listing.type === type);
-            }
-
-            renderListings();
-        }
-
-        // Search listings
-        function searchListings() {
-            const location = document.getElementById('locationSearch').value.toLowerCase();
-            const checkin = document.getElementById('checkinDate').value;
-            const checkout = document.getElementById('checkoutDate').value;
-            const guests = document.getElementById('guestCount').value;
-
-            if (location) {
-                filteredListings = listings.filter(listing => 
-                    listing.location.toLowerCase().includes(location)
-                );
-            } else }        
+    <div class="floating-play" onclick="playDemo()"></div>
+   
+   </body>   
+</html>
